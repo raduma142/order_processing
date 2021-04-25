@@ -149,9 +149,12 @@ class worker_window():
         except: pass
         
         self.main_window = Tk()
-        self.main_window.title("Обработка заказов")
+        self.main_window.title("Подтверждение заказов")
         self.main_window.geometry('800x600')
         self.main_window["bg"] = "gray99"
+        
+        btn_password = Button(self.main_window, text="Обновить", bg="light gray", command=self.show_login_window)
+        btn_password.pack(side=TOP, fill=X)
     
         btn_settings = Button(self.main_window, text="Настройки", bg="light gray", command=self.show_settings_window)
         btn_settings.pack(side=RIGHT, fill=Y)
@@ -161,11 +164,12 @@ class worker_window():
         
         for i in range(self.button_number):
             temp = self.buttons_info[i].split(";")
-            btn_order = Button(self.main_window, text=temp[1], bg="SteelBlue1", command=partial(self.btn_click, i))
-            btn_order.pack(fill=BOTH)
-        
-        lbl_wait = Label(self.main_window, text="Ожидание заказа")
-        lbl_wait.pack(side=BOTTOM, fill=BOTH)
+            entryText = StringVar()
+            entryText.set(temp)  
+            ent_order = Entry(self.settings_window, textvariable=entryText, width=50)          
+            ent_order.pack(fill=X)            
+            btn_order = Button(self.main_window, text='Подтвердить', bg="SteelBlue1", command=partial(self.btn_click, i))
+            btn_order.pack(fill=X)
     
     def show_settings_window(self):
         try: self.main_window.destroy()
@@ -184,22 +188,6 @@ class worker_window():
         lbl_port.pack(fill=X)
         enter_port = Entry(self.settings_window, width=50)
         enter_port.pack(fill=X)
-    
-        btn_minus = Button(self.settings_window, bg="SteelBlue1", text="-")
-        btn_minus.pack(fill=X)
-    
-        lbl_number = Label(self.settings_window, text=str(self.button_number))
-        lbl_number.pack(fill=X)
-    
-        btn_plus = Button(self.settings_window, bg="SteelBlue1", text="+")
-        btn_plus.pack(fill=X)
-        
-        for i in range(self.button_number):
-            temp = self.buttons_info[i].split(";")
-            entryText = StringVar()
-            entryText.set(temp)  
-            btn_order = Entry(self.settings_window, textvariable=entryText, width=50)          
-            btn_order.pack(fill=X)
         
         btn_close = Button(self.settings_window, bg="SteelBlue1", text="Сохранить", command=self.show_main_window)
         btn_close.pack(fill=X)
@@ -220,7 +208,7 @@ class worker_window():
         lbl_user = Label(self.login_window, text=" ", height=2)
         lbl_user.pack(fill=X)
         
-        lbl_user = Label(self.login_window, text="Пользователь")
+        lbl_user = Label(self.login_window, text="Поставщик")
         lbl_user.pack(fill=X)
         
         self.enter_user = Entry(self.login_window, width=50)
@@ -236,7 +224,7 @@ class worker_window():
         btn_login.pack(fill=X)
     
     def btn_click(self, i):
-        self.sending_agent.data_send = self.buttons_info[i]
+        self.sending_agent.data_send = "CONFIRM;" + self.buttons_info[i]
     
     def check_password(self):
         password = self.enter_password.get()

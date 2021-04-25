@@ -1,10 +1,10 @@
 ﻿import socket, time
 from threading import Thread
 
-server_host = "127.0.0.1"
-server_port = 9091
+server_host = ""
+server_port = 9090
 client_host = "127.0.0.1"
-client_port = 9090
+client_port = 9091
 orders_info = []
 password = ""
 
@@ -57,6 +57,8 @@ def soсket_receive():
                     print("REQUEST:")
                     print(msg)
                     if (msg == "password"):
+                        #th_socket_send = Thread(target=soсket_send, args=())
+                        #th_socket_send.start()
                         data_send = "12345"
                     data = None
         finally:
@@ -68,7 +70,6 @@ def main():
   th_socket_receive = Thread(target=soсket_receive, args=())
   th_socket_receive.start()
   input()
-  th_socket_send = Thread(target=soсket_send, args=())
-  th_socket_send.start()
+  
   
 main()
